@@ -1,6 +1,9 @@
 import logging
+import json
 
 from job_manager.amqp.consumer import AMQPConsumer
+from job_manager.amqp.publisher import AMQPPublisher
+from job_manager.services import JobService
 
 
 logger = logging.getLogger('bob-manager')
@@ -22,6 +25,23 @@ class Bob:
         consumer = AMQPConsumer()
         consumer.start(host, vhost, user, password, exchange, queue, callback)
 
-    def callback(self, *args, **kwargs):
+    def callback(self, message, consumer):
         logger.critical("Got a callback")
+        if message.get('command', 'create'):
+            self._start_job(message)
 
+    def _start_job(self, job_message):
+        host = '127.0.0.1'
+        vhost = '/'
+        user = 'manager'
+        password = 'vagrant'
+        exchange = 'bob-jobs'
+        queue = 'execute'
+
+        service = JobService()
+        job = service.create_job(job_message['job_name'])
+        publisher = AMQPPublisher(
+            host, vhost, user, password, exchange, queue)
+        publisher.publish_message(
+            json.dumps({"job_id": str(job.job_id)}))
+        service.set_job_status(job, "queued")
