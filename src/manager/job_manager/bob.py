@@ -1,6 +1,7 @@
 import logging
 
 from job_manager.amqp.consumer import AMQPConsumer
+from job_manager.services import JobService
 
 
 logger = logging.getLogger('bob-manager')
@@ -22,6 +23,11 @@ class Bob:
         consumer = AMQPConsumer()
         consumer.start(host, vhost, user, password, exchange, queue, callback)
 
-    def callback(self, *args, **kwargs):
+    def callback(self, message, consumer):
         logger.critical("Got a callback")
+        if message.get('command', 'create'):
+            self._create_job(message)
 
+    def _create_job(self, job_message):
+        service = JobService()
+        service.create_job(job_message['job_name'])
