@@ -13,3 +13,6 @@ class JobService:
         new_job.save()
         return new_job
 
+    def set_job_status(self, job, status):
+        job.status = status
+        job.save()
