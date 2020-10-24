@@ -27,8 +27,11 @@ class Bob:
 
     def callback(self, message, consumer):
         logger.critical("Got a callback")
-        if message.get('command', 'create'):
+        command = message.get('command')
+        if command == 'create':
             self._start_job(message)
+        elif command == 'update':
+            self._update_job(message)
 
     def _start_job(self, job_message):
         host = '127.0.0.1'
@@ -45,3 +48,11 @@ class Bob:
         publisher.publish_message(
             json.dumps({"job_id": str(job.job_id)}))
         service.set_job_status(job, "queued")
+
+    def _update_job(self, job_message):
+        service = JobService()
+
+        job_id = job_message['job_id']
+        job = service.get_job(job_id)
+
+        service.update_job()
