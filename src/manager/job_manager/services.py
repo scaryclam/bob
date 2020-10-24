@@ -26,7 +26,8 @@ class JobService:
         return job
 
     def update_job(self, job, status):
-        return self.set_job_status(job, status)
+        self.set_job_status(job, status)
+        return job
 
     def get_job(self, job_id):
         job = Job.select().where(Job.job_id==job_id).get()

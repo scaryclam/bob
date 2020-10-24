@@ -55,4 +55,8 @@ class Bob:
         job_id = job_message['job_id']
         job = service.get_job(job_id)
 
-        service.update_job()
+        status = 'running'
+        if job_message.get("new-status", False):
+            status = job_message['new-status']
+
+        service.update_job(job, status)
