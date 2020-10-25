@@ -27,7 +27,7 @@ class Bob:
         user = 'manager'
         password = 'vagrant'
         exchange = 'bob'
-        queue = 'jobs'
+        queue = 'job'
         callback = self.callback
 
         consumer = AMQPConsumer()
@@ -37,8 +37,10 @@ class Bob:
         logger.critical("Got a callback")
         command = message.get('command')
         if command == 'create':
+            logger.critical("Creating Job")
             self._start_job(message)
         elif command == 'update':
+            logger.critical("Updating Job")
             self._update_job(message)
 
     def _start_job(self, job_message):
@@ -53,8 +55,7 @@ class Bob:
         job = service.create_job(job_message['job_name'])
         publisher = AMQPPublisher(
             host, vhost, user, password, exchange, queue)
-        publisher.publish_message(
-            json.dumps({"job_id": str(job.job_id)}))
+        publisher.publish_message({"job_id": str(job.job_id)})
         service.set_job_status(job, "queued")
 
     def _update_job(self, job_message):
