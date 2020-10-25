@@ -13,6 +13,7 @@ Vagrant::Config.run do |config|
   config.vm.share_folder "scheduler", "/srv/bob/scheduler", "../src/scheduler"
   config.vm.share_folder "runner", "/srv/bob/runner", "../src/runner"
   config.vm.share_folder "manager", "/srv/bob/manager", "../src/manager"
+  config.vm.share_folder "viewer", "/srv/bob/viewer", "../src/viewer"
   config.vm.share_folder "build", "/build", "../build/config"
 
   # SALT STACK PROVISIONING
