@@ -4,6 +4,7 @@ import json
 from job_manager.amqp.consumer import AMQPConsumer
 from job_manager.amqp.publisher import AMQPPublisher
 from job_manager.services import JobService
+from job_manager.cleaner import start_cleaner
 
 
 logger = logging.getLogger('bob-manager')
@@ -11,6 +12,13 @@ logger = logging.getLogger('bob-manager')
 
 class Bob:
     def start(self):
+        self._start_cleaner()
+        self._start_consumer()
+
+    def _start_cleaner(self):
+        start_cleaner()
+
+    def _start_consumer(self):
         host = '127.0.0.1'
         vhost = '/'
 

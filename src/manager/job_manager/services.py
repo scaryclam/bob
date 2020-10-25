@@ -27,8 +27,15 @@ class JobService:
 
     def update_job(self, job, status):
         self.set_job_status(job, status)
+        job.modified = datetime.now()
+        job.save()
         return job
 
     def get_job(self, job_id):
         job = Job.select().where(Job.job_id==job_id).get()
         return job
+
+    def get_active_jobs(self):
+        job_statuses = ['created', 'running', 'queued']
+        jobs = Job.select().where(Job.status<<job_statuses)
+        return jobs
