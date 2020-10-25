@@ -33,3 +33,11 @@ bob_env:
     - user: vagrant
     - python: /usr/bin/python3.8
 
+/virtualenv/bob/viewer:
+  virtualenv.managed:
+    - use_wheel : False
+    - system_site_packages: False
+    - requirements: /build/requirements-viewer.txt
+    - user: vagrant
+    - python: /usr/bin/python3.8
+
