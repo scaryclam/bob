@@ -5,7 +5,7 @@ from job_manager.models import Job
 
 
 class JobService:
-    def create_job(self, name):
+    def create_job(self, name, harakiri_delta_seconds=30):
         uuid = uuid4()
         created = datetime.now()
         modified = datetime.now()
@@ -14,6 +14,7 @@ class JobService:
             name=name,
             job_id=uuid,
             status="created",
+            harakiri_delta_seconds=harakiri_delta_seconds,
             created=created,
             modified=modified)
         new_job.save()
