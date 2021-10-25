@@ -15,7 +15,7 @@ bob_env:
     - system_site_packages: False
     - requirements: /build/requirements-scheduler.txt
     - user: vagrant
-    - python: /usr/bin/python3.8
+    - python: /usr/bin/python3.9
 
 /virtualenv/bob/runner:
   virtualenv.managed:
@@ -23,7 +23,7 @@ bob_env:
     - system_site_packages: False
     - requirements: /build/requirements-runner.txt
     - user: vagrant
-    - python: /usr/bin/python3.8
+    - python: /usr/bin/python3.9
 
 /virtualenv/bob/manager:
   virtualenv.managed:
@@ -31,7 +31,7 @@ bob_env:
     - system_site_packages: False
     - requirements: /build/requirements-manager.txt
     - user: vagrant
-    - python: /usr/bin/python3.8
+    - python: /usr/bin/python3.9
 
 /virtualenv/bob/viewer:
   virtualenv.managed:
@@ -39,5 +39,5 @@ bob_env:
     - system_site_packages: False
     - requirements: /build/requirements-viewer.txt
     - user: vagrant
-    - python: /usr/bin/python3.8
+    - python: /usr/bin/python3.9
 

@@ -7,13 +7,13 @@ core:
       - git
       - unzip
       - npm
-      - python-virtualenv
-      - python3.8
-      - python3.8-dev
-      - python-pip
+      - virtualenv
+      - python3.9
+      - python3.9-dev
+      - python3-pip
       - make
-      - postgresql-10
-      - postgresql-server-dev-10
+      - postgresql-12
+      - postgresql-server-dev-12
       - rabbitmq-server
     - refresh: True
 
