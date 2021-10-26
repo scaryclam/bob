@@ -1,5 +1,6 @@
 import logging
 import json
+import time
 
 from job_runner.amqp.consumer import AMQPConsumer
 from job_runner.amqp.publisher import AMQPPublisher
@@ -43,3 +44,16 @@ class Runner:
         publisher.publish_message({"job_id": str(job_id),
                                    "new-status": "running",
                                    "command": "update"})
+
+        # TODO: Start the process instead of faking it
+        for counter in range(1, 101):
+            time.sleep(5)
+            publisher.publish_message(
+                {"job_id": str(job_id),
+                 "new-status": "running",
+                 "command": "update",
+                 "percentage": counter})
+        publisher.publish_message(
+            {"job_id": str(job_id),
+             "new-status": "complete",
+             "command": "update"})
