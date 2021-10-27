@@ -3,6 +3,7 @@ import json
 
 from job_runner.amqp.consumer import AMQPConsumer
 from job_runner.amqp.publisher import AMQPPublisher
+import settings
 
 
 logger = logging.getLogger("runner")
@@ -13,27 +14,27 @@ class Runner:
         self._start_consumer()
 
     def _start_consumer(self):
-        host = '127.0.0.1'
-        vhost = '/'
+        host = settings.RABBITMQ['consumer']['HOST']
+        vhost = settings.RABBITMQ['consumer']['VHOST']
 
-        # Examples to use with the vagrant setup.
-        # TODO: config file
-        user = 'manager'
-        password = 'vagrant'
-        exchange = 'bob-jobs'
-        queue = 'execute'
+        user = settings.RABBITMQ['consumer']['USER']
+        password = settings.RABBITMQ['consumer']['PASSWORD']
+        exchange = settings.RABBITMQ['consumer']['EXCHANGE']
+        queue = settings.RABBITMQ['consumer']['QUEUE']
+
         callback = self.callback
 
         consumer = AMQPConsumer()
         consumer.start(host, vhost, user, password, exchange, queue, callback)
 
     def callback(self, message, consumer):
-        host = '127.0.0.1'
-        vhost = '/'
-        user = 'manager'
-        password = 'vagrant'
-        exchange = 'bob'
-        queue = 'job'
+        host = settings.RABBITMQ['publisher']['HOST']
+        vhost = settings.RABBITMQ['publisher']['VHOST']
+
+        user = settings.RABBITMQ['publisher']['USER']
+        password = settings.RABBITMQ['publisher']['PASSWORD']
+        exchange = settings.RABBITMQ['publisher']['EXCHANGE']
+        queue = settings.RABBITMQ['publisher']['QUEUE']
 
         logger.critical("Got a callback")
         job_id = message.get('job_id')
