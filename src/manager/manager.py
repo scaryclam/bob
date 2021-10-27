@@ -1,5 +1,8 @@
 #!/usr/bin/env python
 
+import os
+import importlib
+
 from job_manager.bob import Bob
 
 

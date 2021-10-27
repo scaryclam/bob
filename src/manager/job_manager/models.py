@@ -1,15 +1,17 @@
 from datetime import datetime
 
+import settings
+
 from peewee import (
     Model, UUIDField, CharField, IntegerField, DateTimeField,
     PostgresqlDatabase)
 
 database = PostgresqlDatabase(
-    'manager', 
-    user='vagrant', 
-    password='vagrant',
-    host='127.0.0.1', 
-    port=5432)
+    settings.DATABASES['default']['name'],
+    user=settings.DATABASES['default']['user'],
+    password=settings.DATABASES['default']['user'],
+    host=settings.DATABASES['default']['host'],
+    port=settings.DATABASES['default']['port'])
 
 
 class BaseModel(Model):
