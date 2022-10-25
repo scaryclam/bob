@@ -3,12 +3,14 @@
 import os
 import importlib
 
-from schedular import Schedular
+from schedular.schedular import Schedular
+import settings
 
 
 def run():
     schedular = Schedular()
-    schedular.start()
+    schedule = settings.SAMPLE_SCHEDULE
+    schedular.start(schedule)
 
 
 if __name__ == '__main__':
