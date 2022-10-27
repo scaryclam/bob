@@ -5,6 +5,8 @@ from time import time, sleep
 
 from croniter import croniter
 
+from amqp.publisher import AMQPPublisher
+
 
 class Job:
     def __init__(self, job_config):
@@ -14,6 +16,23 @@ class Job:
         self.name = job_config['name']
         self.cron = croniter(self.cron_config, datetime.now())
         self.next_schedule = None
+        self.publisher = self._make_publisher(
+            job_config['host'],
+            job_config['vhost'],
+            job_config['user'],
+            job_config['password'],
+            job_config['exchange'],
+            job_config['target_queue'])
+
+    def _make_publisher(self, host, vhost, user, password, exchange, queue):
+        publisher = AMQPPublisher(
+            host, vhost, user, password, exchange, queue)
+        return publisher
+
+    def publish_job(self):
+        self.publisher.publish_message({"job_id": self.job_id,
+                                        "name": self.name,
+                                        "message": self.message})
 
     def get_next_run_time(self):
         if self.next_schedule is None:
@@ -25,11 +44,18 @@ class Job:
             'name': self.name,
             'message': self.message,
             'schedule': self.cron_config,
+            'target_queue': 'execute',
+            'vhost': '/',
+            'host': '127.0.0.1',
+            'user': 'manager',
+            'password': 'vagrant',
+            'exchange': 'bob-jobs',
         }
         return config
 
     def run(self, scheduler_callback, **kwargs):
         print(f"Running job {self.job_id} ({self.name})")
+        self.publish_job()
         scheduler_callback(self.create_config(), self.job_id)
 
 
